@@ -1,10 +1,10 @@
 # python进阶
-
-## 装饰器
+[toc]
+## 装饰器 
 
 装饰器是可调用的对象，其参数是另一个函数（被装饰的函数），装饰器可以处理被装饰的函数，然后把它返回一个函数
 
-将targett的替换为inner
+将target替换为inner
 ````python
 def deco(func):
     def inner():
@@ -24,6 +24,7 @@ if __name__ == "__main__":
 ````python
 def deco(func):
     def inner():
+        func()
         print("running inner()")
     return inner
 
@@ -71,7 +72,7 @@ import time
 def decorator(func):
     def wrapper(*arg, **kwarg):
         start_time = time.time()
-        r = func()
+        r = func(*arg, **kwarg)
         end_time = time.time()
         print("执行时间:",end_time - start_time)
         return r
@@ -92,7 +93,7 @@ print(func())
 在掉用next方法的时，迭代器会返回它的下一个值，如果没有值了，则返回StopIteration
 ````python
 >>> li = [1,2,3]   # li为可迭代对象
->>> b = l.__iter__()    #b 为迭代器
+>>> b = li.__iter__()    #b 为迭代器
 >>> next(b)
 1
 >>> next(b)
@@ -128,7 +129,6 @@ for i in range(10):
 
 前n个数求和
 ````python
-import random
 def addsum(n):
     s = 0
     for i in range(1,n+1):
@@ -166,7 +166,7 @@ pickle模块是一种的对象序列化工具；对于内存中几乎任何的py
 这个字节可以随后用来在内存中重建最初的对象。pickle模块能够处理我们用的任何对象，列表，字典
 嵌套组合以及类和实例
 
-#### 1. dumps和 loads
+#### dumps和 loads
 列表对象
 ````
 >>> import pickle
@@ -237,7 +237,7 @@ os.path 模块
 `os.path.isdir(path)`
 
 列出目录下包括子目录的所有文件
-````
+````python
 import os
 
 for dirpath, dirames, filenames  in os.walk("d:/py/peixun/python-dev"):
@@ -248,7 +248,7 @@ for dirpath, dirames, filenames  in os.walk("d:/py/peixun/python-dev"):
 
 ### 调用系统命令
 
-os.systm
+os.system
 
 `os.system('dir')` 
 
@@ -303,8 +303,8 @@ print(r["PATH"])
 ### 线程
 线程是中轻量级的进程，所有线程均在同一个进程中，共享全局内存，用于任务并行
 ###  常见线程用法
-实例1 不同任务并行
-```
+实例1 不同任务并发
+```python
 import threading
 import time
 
@@ -320,12 +320,12 @@ print("main thread")
 
 ```
 注意：这里有两个线程一个是主线程，一个是通过threading模块产生的t线程，
-这里程序并没有阻塞在helloword函数，主线程和t线程并行运行
+这里程序并没有阻塞在helloword函数，主线程和t线程同时运行
 
 
 实例2 同种任务并行
 
-````buildoutcfg
+````python
 import threading
 import time
 
@@ -346,7 +346,7 @@ print("main thread")
 
 multiprocessing 解决python线程不能利用多核cpu的问题
 
-```
+```python
 import os
 
 from multiprocessing import Process
@@ -358,7 +358,7 @@ def whoami(label):
 
 if __name__ == '__main__':
     for i in range(5):
-        p = Process(target=whoami, args=('child'))
+        p = Process(target=whoami, args=('child',))
         p.start()
 ```
 
@@ -382,7 +382,7 @@ def get_baidu():
 
 with ThreadPoolExecutor(max_workers=4) as executor:
     for i in range(100):
-        executor.submit(get_baidu())
+        executor.submit(get_baidu)
 
 ```
 
@@ -402,7 +402,7 @@ def get_baidu():
 if __name__ == "__main__":
     with ProcessPoolExecutor(max_workers=4) as executor:
         for i in range(100):
-            executor.submit(get_baidu())
+            executor.submit(get_baidu)
 
 ```
 
@@ -412,14 +412,14 @@ if __name__ == "__main__":
 ##作业
 1. 复制目录,拷贝目录a到a.bak
 2. 编写一个pemit装饰器实现权限认证
-```
+```python
 def test(info):
-    if info.username == 'root' and 'info.passwd'=='1223':
+    if info.username == 'root' and info.passwd =='1223':
         print('你有权限')
     else:
         print('你没有权限')
         return 
-    return data = "1,2,3" 
+    return "1,2,3" 
 
 
 def test2(info):
@@ -428,16 +428,16 @@ def test2(info):
     else:
         print('你没有权限')
         return 
-    return data2 = "4,5,6" 
+    return "4,5,6" 
 
 
 @permit
 def test2(info)
-    return data2 = "4,5,6" 
+    return "4,5,6" 
 
 @permit
 def test(info)
-    return data = "123"
+    return "123"
    
 实现permit装饰器对权限进行验证
 ```
