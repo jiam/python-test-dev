@@ -1,0 +1,4 @@
+org\apache\dubbo\samples\api\GreetingsService.class
+org\apache\dubbo\samples\client\Application.class
+org\apache\dubbo\samples\provider\Application.class
+org\apache\dubbo\samples\provider\GreetingsServiceImpl.class

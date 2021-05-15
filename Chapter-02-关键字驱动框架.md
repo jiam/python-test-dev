@@ -408,6 +408,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
+from email.header import Header
 
 #设置登录及服务器信息
 mail_host = 'smtp.qq.com'
@@ -423,28 +424,28 @@ message['From'] = sender
 message['To'] = receivers[0]
 message['Subject'] = 'title'
 #推荐使用html格式的正文内容，这样比较灵活，可以附加图片地址，调整格式等
-with open('abc.html','r') as f:
+with open('测试.html','r') as f:
     content = f.read()
 #设置html格式参数
 part1 = MIMEText(content,'html','utf-8')
 
 #添加一个txt文本附件
-with open('abc.txt','r')as h:
+with open('测试.txt','r')as h:
     content2 = h.read()
 #设置txt参数
 part2 = MIMEText(content2,'plain','utf-8')
 #附件设置内容类型，方便起见，设置为二进制流
 part2['Content-Type'] = 'application/octet-stream'
-#设置附件头，添加文件名
-part2['Content-Disposition'] = 'attachment;filename="abc.txt"'
+#设置附件头，添加文件名。Header 对中文进行编码
+part2['Content-Disposition'] = 'attachment;filename=%s' % Header('测试.txt','utf-8').encode()
 
 
 #添加照片附件
-with open('abc.jpg','rb')as fp:
+with open('测试.jpg','rb')as fp:
     part3 = MIMEImage(fp.read())
     #与txt文件设置相似
     part3['Content-Type'] = 'application/octet-stream'
-    part3['Content-Disposition'] = 'attachment;filename="1.png"'
+    part3['Content-Disposition'] = 'attachment;filename=%s' % Header('测试.jpg','utf-8').encode()
 #将内容附加到邮件主体中
 message.attach(part1)
 message.attach(part2)

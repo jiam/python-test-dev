@@ -1,0 +1,103 @@
+2021-05-15 09:47:45 apiteststudy INFO     this is test
+2021-05-15 10:11:11 apiteststudy INFO     用户管理 测试开始
+2021-05-15 10:11:11 apiteststudy INFO     创建用户 开始
+2021-05-15 10:11:11 apiteststudy INFO     url: http://127.0.0.1:8000//api/users/10000
+2021-05-15 10:11:11 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 10:11:11 apiteststudy INFO     期望结果:1
+2021-05-15 10:52:17 apiteststudy INFO     用户管理 测试开始
+2021-05-15 10:52:17 apiteststudy INFO     创建用户 开始
+2021-05-15 10:52:17 apiteststudy INFO     url: http://127.0.0.1:8000//api/users/10000
+2021-05-15 10:52:17 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 10:52:17 apiteststudy INFO     期望结果:1
+2021-05-15 10:52:48 apiteststudy INFO     用户管理 测试开始
+2021-05-15 10:52:48 apiteststudy INFO     创建用户 开始
+2021-05-15 10:52:48 apiteststudy INFO     url: http://127.0.0.1:5000//api/users/10000
+2021-05-15 10:52:48 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 10:52:48 apiteststudy INFO     期望结果:1
+2021-05-15 10:52:48 apiteststudy INFO     响应内容:{"success": true, "msg": "user created successfully."}
+2021-05-15 10:53:01 apiteststudy INFO     用户管理 测试开始
+2021-05-15 10:53:01 apiteststudy INFO     创建用户 开始
+2021-05-15 10:53:01 apiteststudy INFO     url: http://127.0.0.1:5000//api/users/10000
+2021-05-15 10:53:01 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 10:53:01 apiteststudy INFO     期望结果:1
+2021-05-15 10:53:01 apiteststudy INFO     响应内容:{"success": false, "msg": "user already existed."}
+2021-05-15 10:59:09 apiteststudy INFO     用户管理 测试开始
+2021-05-15 10:59:09 apiteststudy INFO     创建用户 开始
+2021-05-15 10:59:09 apiteststudy INFO     url: http://127.0.0.1:5000//api/users/10000
+2021-05-15 10:59:09 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 10:59:09 apiteststudy INFO     期望结果:1
+2021-05-15 10:59:09 apiteststudy INFO     响应内容:{"success": true, "msg": "user created successfully."}
+2021-05-15 10:59:21 apiteststudy INFO     用户管理 测试开始
+2021-05-15 10:59:21 apiteststudy INFO     创建用户 开始
+2021-05-15 10:59:21 apiteststudy INFO     url: http://127.0.0.1:5000//api/users/10000
+2021-05-15 10:59:21 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 10:59:21 apiteststudy INFO     期望结果:1
+2021-05-15 10:59:21 apiteststudy INFO     响应内容:{"success": false, "msg": "user already existed."}
+2021-05-15 11:00:06 apiteststudy INFO     用户管理 测试开始
+2021-05-15 11:00:06 apiteststudy INFO     创建用户 开始
+2021-05-15 11:00:06 apiteststudy INFO     url: http://127.0.0.1:5000//api/users/10000
+2021-05-15 11:00:06 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 11:00:06 apiteststudy INFO     期望结果:1
+2021-05-15 11:00:06 apiteststudy INFO     响应内容:{"success": false, "msg": "user already existed."}
+2021-05-15 11:00:08 apiteststudy INFO     用户管理 测试开始
+2021-05-15 11:00:08 apiteststudy INFO     创建用户 开始
+2021-05-15 11:00:08 apiteststudy INFO     url: http://127.0.0.1:5000//api/users/10000
+2021-05-15 11:00:08 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 11:00:08 apiteststudy INFO     期望结果:1
+2021-05-15 11:00:08 apiteststudy INFO     响应内容:{"success": true, "msg": "user created successfully."}
+2021-05-15 11:00:09 apiteststudy INFO     用户管理 测试开始
+2021-05-15 11:00:09 apiteststudy INFO     创建用户 开始
+2021-05-15 11:00:09 apiteststudy INFO     url: http://127.0.0.1:5000//api/users/10000
+2021-05-15 11:00:09 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 11:00:09 apiteststudy INFO     期望结果:1
+2021-05-15 11:00:10 apiteststudy INFO     响应内容:{"success": true, "msg": "user created successfully."}
+2021-05-15 11:00:11 apiteststudy INFO     用户管理 测试开始
+2021-05-15 11:00:11 apiteststudy INFO     创建用户 开始
+2021-05-15 11:00:11 apiteststudy INFO     url: http://127.0.0.1:5000//api/users/10000
+2021-05-15 11:00:11 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 11:00:11 apiteststudy INFO     期望结果:1
+2021-05-15 11:00:11 apiteststudy INFO     响应内容:{"success": true, "msg": "user created successfully."}
+2021-05-15 11:08:45 apiteststudy INFO     用户管理 测试开始
+2021-05-15 11:08:45 apiteststudy INFO     创建用户 开始
+2021-05-15 11:08:45 apiteststudy INFO     url: http://127.0.0.1:5000//api/users/10000
+2021-05-15 11:08:45 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 11:08:45 apiteststudy INFO     期望结果:1
+2021-05-15 11:08:45 apiteststudy INFO     响应内容:{"success": true, "msg": "user created successfully."}
+2021-05-15 11:14:44 apiteststudy INFO     用户管理 测试开始
+2021-05-15 11:14:44 apiteststudy INFO     创建用户 开始
+2021-05-15 11:14:44 apiteststudy INFO     url: http://127.0.0.1:5000//api/users/10000
+2021-05-15 11:14:44 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 11:14:44 apiteststudy INFO     期望结果:1
+2021-05-15 11:14:44 apiteststudy INFO     响应内容:{"success": true, "msg": "user created successfully."}
+2021-05-15 11:15:24 apiteststudy INFO     用户管理 测试开始
+2021-05-15 11:15:24 apiteststudy INFO     创建用户 开始
+2021-05-15 11:15:24 apiteststudy INFO     url: http://127.0.0.1:5000//api/users/10000
+2021-05-15 11:15:24 apiteststudy INFO     入参: {
+    "user":"test"
+}
+2021-05-15 11:15:24 apiteststudy INFO     期望结果:1
+2021-05-15 11:15:24 apiteststudy INFO     响应内容:{"success": true, "msg": "user created successfully."}
