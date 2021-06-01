@@ -152,6 +152,9 @@ thrift 命令可以根据idl(接口描述语言)文件直接生成相应语言�
 https://downloads.apache.org/thrift/0.13.0/thrift-0.13.0.exe
 
 + macos
+指定国内源
+`export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles/bottles`
+安装thirft
 `brew install thrift`
 
 
@@ -289,7 +292,7 @@ if __name__ == '__main__':
 `pip install grpcio-tools`
 
 
-#### 编写idl
+#### 编写idl helloworld.proto
 ```
 syntax = "proto3";
 
@@ -531,7 +534,7 @@ windows
 进入bin目录执行`zkServer.cmd`
 
 linux 
-进入bin目录执行`zkServer.sh start`
+进入bin目录执行`bash zkServer.sh start`
 
 验证：
 windows
@@ -539,14 +542,14 @@ zkCli.cmd
 
 linux
 
-zkcli.sh
+bash zkcli.sh
 
 
 3. dubbo-samples-api
 
 从群文件下载dubbo-samples-api.zip解压进入 dubbo-samples-api目录
 
-执行命令`mvn clean pacakge`
+执行命令`mvn clean package`
 
 启动provider`mvn -Djava.net.preferIPv4Stack=true -Dexec.mainClass=org.apache.dubbo.samples.provider.Application exec:java`
 

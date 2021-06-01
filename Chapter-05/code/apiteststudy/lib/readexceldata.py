@@ -25,5 +25,5 @@ if __name__ == '__main__':
     file = os.path.join(datapath, '接口测试用例.xls')
     tag = 'user'
     test_list = excel_to_list(file, tag)
-    print(get_test_data('create_user',test_list ))
+    print(get_test_data('get_user',test_list ))
 
