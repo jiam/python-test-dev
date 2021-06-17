@@ -1330,7 +1330,7 @@ textarea.val('Hi'); // 文本区域已更新为'Hi'
     <ul>
         <li><span>JavaScript</span></li>
         <li><span>Python</span></li>
-        <li><span>Swift</span></li>
+        <li id="swift"><span>Swift</span></li>
     </ul>
 </div>
 </body>
@@ -1394,22 +1394,52 @@ a.click(function () {
 ajax
 jQuery在全局对象jQuery（也就是$）绑定了ajax()函数，可以处理AJAX请求。ajax(url, settings)函数需要接收一个URL和一个可选的settings对象，常用的选项如下：
 
-+ async：是否异步执行AJAX请求，默认为true，千万不要指定为false；
++ url： 请求的url
 
-+ method：发送的Method，缺省为'GET'，可指定为'POST'、'PUT'等；
++ type：发送的Method，缺省为'GET'，可指定为'POST'、'PUT'等；
 
 + contentType：发送POST请求的格式，默认值为'application/x-www-form-urlencoded; charset=UTF-8'，也可以指定为text/plain、application/json；
 
 + data：发送的数据，可以是字符串、数组或object。如果是GET请求，data将被转换成query附加到URL上，如果是POST请求，根据contentType把data序列化成合适的格式；
 
-+ headers：发送的额外的HTTP头，必须是一个object；
 
-+ dataType：接收的数据格式，可以指定为'html'、'xml'、'json'、'text'等，缺省情况下根据响应的Content-Type猜测。
+
 
 发送一个get请求
 ```js
 var jqxhr = $.ajax('/');
 // 请求已经发送了
+```
+
+发送一个json请求,并展示数据
+```html
+
+<html>
+<head>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<h2>返回数据</h2>
+<p></p>
+</body>
+</html>
+```
+
+```js
+ content = {
+     name: "jia",
+     age: 18
+ }
+ $.ajax({
+            type: 'POST',
+            url: 'https://httpbin.org/post',
+            data: JSON.stringify(content),
+            success: function(data){
+                console.log(data)
+                $("p").text(data.data)
+             } ,
+            contentType: 'application/json'
+        });
 ```
 
 对常用的AJAX操作，jQuery提供了一些辅助方法。由于GET请求最常见，所以jQuery提供了get()方法，可以这么写：

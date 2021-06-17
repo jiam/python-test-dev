@@ -1,0 +1,45 @@
+<html>
+<head>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<form id="test-register" action="#"  onsubmit="return checkRegisterForm()">
+    <p id="test-error" style="color:red"></p>
+    <p>
+        用户名: <input type="text" id="username" name="username">
+    </p>
+    <p>
+        口令: <input type="password" id="password" name="password">
+    </p>
+    <p>
+        重复口令: <input type="password" id="password-2">
+    </p>
+    <p>
+        <button type="submit">提交</button> <button type="reset">重置</button>
+    </p>
+</form>
+
+
+</body>
+<script>
+function checkRegisterForm(){
+    if (!/^[A-Za-z0-9]+$/.test($('#username').val())) {
+        alert('用户名格式不正确');
+        return false;
+    } 
+    if ($("#password").val().length < 6 || $("#password").val().length > 20) {
+        alert('密码长度为6-20');
+        return false;
+    }
+
+    if ($("#password").val() !== $("#password-2").val()){
+        alert('两次密码不同')
+        return false
+    }
+    return ture
+}
+
+</script>
+
+
+</html>

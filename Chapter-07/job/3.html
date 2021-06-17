@@ -1,0 +1,26 @@
+<div class="test-selector">
+    <ul class="test-lang">
+        <li class="lang-javascript">JavaScript</li>
+        <li class="lang-python">Python</li>
+        <li class="lang-lua">Lua</li>
+    </ul>
+    <ol class="test-lang">
+        <li class="lang-swift">Swift</li>
+        <li class="lang-java">Java</li>
+        <li class="lang-c">C</li>
+    </ol>
+</div>
+<button onclick="selectstatic()">静态语言</button>
+<button onclick="selectl()">动态语言</button>
+<script>
+function selectstatic(){
+e = document.getElementsByClassName("test-lang")[1]
+e.setAttribute("style", "color: #ff0000");
+}
+
+function selectl(){
+e = document.getElementsByClassName("test-lang")[0]
+e.setAttribute("style", "color: #ff0000");
+}
+
+</script>

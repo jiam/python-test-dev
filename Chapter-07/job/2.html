@@ -1,0 +1,24 @@
+<ul id="test-list">
+    <li>JavaScript</li>
+    <li>Swift</li>
+    <li>HTML</li>
+    <li>ANSI C</li>
+    <li>CSS</li>
+    <li>DirectX</li>
+</ul>
+
+<script>
+ul = document.getElementById("test-list");
+children = ul.children;
+for(var i=0; i<children.length; i++){
+    if (children[i].innerHTML === "Swift") {
+        ul.removeChild(children[i]);
+    }
+    if (children[i].innerHTML === "DirectX") {
+        ul.removeChild(children[i])
+    }
+    if (children[i].innerHTML === "ANSI C") {
+        ul.removeChild(children[i])
+    }
+}
+</script>

@@ -1,0 +1,14 @@
+<div id="test-div">
+  <p id="test-js">javascript</p>
+  <p>Java</p>
+</div>
+
+<button onclick="change()">点击</button>
+
+<script>
+function change(){
+var js = document.getElementById("test-js");
+js.innerText = "JavaScript";
+js.setAttribute("style", "color: #ff0000");
+}
+</script>
