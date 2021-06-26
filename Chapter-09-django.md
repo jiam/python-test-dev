@@ -5,7 +5,7 @@
 ### 开始第一个测试
 将下面的代码写入polls/tests.py
 
-```
+```python
 import datetime
 
 from django.test import TestCase
@@ -32,7 +32,7 @@ class QuestionModelTests(TestCase):
 ` python manage.py test polls`
 
 输出结果如下
-```
+```shell
 Creating test database for alias 'default'...
 System check identified no issues (0 silenced).
 .
@@ -67,13 +67,13 @@ Django 提供了一个供测试使用的 Client 来模拟用户和视图层代�
 
 `python.exe manage.py shell`
 
-```
+```python
 >>> from django.test.utils import setup_test_environment
 >>> setup_test_environment()
 ```
 配置测试环境
 
-```
+```python
 >>> from django.test import Client  
 >>> client = Client()
 >>> response = client.get('/') 
@@ -97,8 +97,8 @@ b'\n    <ul>\n    \n        <li><a href="/polls/1/">What&#39;s new?</a></li>\n  
 
 `from django.urls import reverse`
 
-然后我们写一个函数用于创建投票问题，再为视图创建一个测试类
-```
+然后我们写一个函数用于创建投票问题，再为index视图创建一个测试类
+```python
 def create_question(question_text, days):
     """
     创建一个Question
@@ -131,7 +131,7 @@ class QuestionIndexViewTests(TestCase):
 
 测试详情视图
 
-```
+```python
 class QuestionDetailViewTests(TestCase):
     def test_past_question(self):
         past_question = create_question(question_text='Past Question.', days=-5)
@@ -151,14 +151,14 @@ django会在每个 INSTALLED_APPS 中指定的应用的子文件中寻找名称�
 在你刚创建的 static 文件夹中创建一个名为 polls 的文件夹，再在 polls 文件夹中创建一个名为 style.css 的文件。你的样式表路径应是 polls/static/polls/style.css
 
 将以下代码放入样式表(polls/static/polls/style.css)：
-```
+```html
 li a {
     color: green;
 }
 ```
 
 下一步，在 polls/templates/polls/index.html 的文件头添加以下内容：
-```
+```html
 {% load static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
@@ -172,7 +172,7 @@ li a {
 我们会创建一个用于存在图像的目录。在 polls/static/polls 目录下创建一个名为 images 的子目录。在这个目录中，放一张名为 background.gif 的图片。换言之，在目录 polls/static/polls/images/background.png 中放一张图片。
 
 随后，polls/static/polls/style.css中添加：
-```
+```css
 body {
     background: white url("images/background.png") no-repeat;
 }
@@ -190,7 +190,7 @@ body {
 
 创建一个base模板
 polls/templates/polls/base.html
-```
+```html
 <!DOCTYPE html>
 <html>
   <head lang="zh">
@@ -206,7 +206,7 @@ polls/templates/polls/base.html
 ### 定义block
 创建好基础模板之后，接下来要指明模板中的哪些部分可由继承它的模板覆盖。为此，要使用`block`标签。例如，可以像下面这样在 base.html 模板中添加
 
-```
+```html
 <!DOCTYPE html>
 <html>
   <head lang="zh">
@@ -223,7 +223,7 @@ polls/templates/polls/base.html
 Django 模板标签放在 {% 和 %} 之间。因此，区块以 {% block %} 开头，其中 是区块的名称。区块必须以 endblock 结尾，而且也要放在 {% 和 %} 之间，即 {% endblock %}。
 
 可以为区块指定默认内容，在子模板没有提供该区块的内容时使用。指定默认内容的方法是在 {% block %} 和 {% endblock %} 之间添加 HTML 标记，如下所示。
-```
+```html
     {% block body_block %}
       这是区块默认内容
     {% endblock %}
@@ -231,7 +231,7 @@ Django 模板标签放在 {% 和 %} 之间。因此，区块以 {% block %} 开�
 创建各页面的模板时，我们将继承 polls/templates/polls/base.html模板，然后覆盖 body_block 区块的内容。模板中的区块数量不限，可以根据需要定义。例如，可以创建页面标题区块、页脚区块、侧边栏block，等等。block是 Django 模板系统一个特别强大的功能。
 
 ### index.html使用模板
-```
+```html
 {% extends 'polls/base.html' %}
 {% block body_block %}
 {% load static %}
@@ -278,7 +278,7 @@ Django 模板标签放在 {% 和 %} 之间。因此，区块以 {% block %} 开�
 下面是一些常用的标签：
 
 1.  for循环标签
-```
+```html
 {% for question in latest_question_list %}
         <li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
 {% endfor %}
@@ -367,7 +367,7 @@ commnet 标签多行注释
 
 编辑login/models.py文件，代码如下：
 
-```
+```python
 from django.db import models
 
 # Create your models here.
@@ -413,7 +413,7 @@ class User(models.Model):
 每次创建了新的app后，都需要在全局settings中注册，这样Django才知道你有新的应用上线了。在INSTALLED_APPS部分添加`login.apps.LoginConfig`
 mysiste/settings.py
 
-```
+```python
 INSTALLED_APPS = [
     'login.apps.LoginConfig',
     'polls.apps.PollsConfig',
@@ -454,7 +454,7 @@ Running migrations:
 ### 在admin注册模型
 
 编辑文件login/admin.py
-```
+```python
 from django.contrib import admin
 
 from .models import User
@@ -482,7 +482,7 @@ URL	视图	模板	说明
 + 登出后，自动跳转到login界面
 
 新建login/urls.py,内容如下
-```
+```python
 from django.urls import path
 from . import  views
 app_name = 'login'
@@ -497,7 +497,7 @@ urlpatterns = [
 编辑mysite/urls.py添加`path('auth/', include('login.urls')),`
 
 ### 架构视图
-```
+```python
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -539,7 +539,7 @@ def logout(request):
 在login/templates/login目录中创建三个文件index.html、login.html以及register.html ，并写入如下的代码：
 
 login/templates/login/index.html
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -553,7 +553,7 @@ login/templates/login/index.html
 ```
 
 login/templates/login/login.html
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -568,7 +568,7 @@ login/templates/login/login.html
 
 login/templates/login/register.html
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
