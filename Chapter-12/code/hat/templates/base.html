@@ -1,0 +1,151 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+    {% load staticfiles %}
+    <meta name="apple-mobile-web-app-title" content="HAT"/>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.bootcss.com/amazeui/2.7.2/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="{% static 'assets/css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
+
+    <script src="https://cdn.bootcss.com/amazeui/2.7.2/js/amazeui.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery.serializeJSON/2.9.0/jquery.serializejson.min.js"></script>
+    <script src="https://cdn.bootcss.com/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdn.bootcss.com/ace/1.2.6/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+    <script src="{% static 'assets/js/app.js' %}"></script>
+    <script src="{% static 'assets/js/commons.js' %}"></script>
+
+
+</head>
+
+<body class="modal-open">
+<div class="am-modal am-modal-alert" tabindex="-1" id="my-alert">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">HAT</div>
+        <div class="am-modal-bd" id="my-alert_print">
+            Sorry，服务器可能开小差啦, 请重试!
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn">确定</span>
+        </div>
+    </div>
+</div>
+
+
+<div class="am-cf admin-main">
+    <div class="nav-navicon admin-main admin-sidebar">
+        <div class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"> 欢迎您：{{ request.session.now_account }} &nbsp;&nbsp;<a
+                href="#">注 销</a></div>
+        <div class="sideMenu">
+            {% if  "project" in request.path %}
+            <h3 class="am-icon-folder on"><em></em> <a href="#">项目管理</a></h3>
+            {% else %}
+            <h3 class="am-icon-folder"><em></em> <a href="#">项目管理</a></h3>
+            {% endif %}
+            <ul>
+                <li><a href="{% url 'project_list' %}">项 目 列 表</a></li>
+                <li><a href="{% url 'project_add' %}">新 增 项 目</a></li>
+            </ul>
+            {% if  "module" in request.path %}
+            <h3 class="am-icon-th-list on"><em></em> <a href="#"> 模块管理</a></h3>
+            {% else %} 
+            <h3 class="am-icon-th-list"><em></em> <a href="#"> 模块管理</a></h3>
+            {% endif %}
+            <ul>
+                <li><a href="{% url 'module_list' %}">模 块 列 表</a></li>
+                <li><a href="{% url 'module_add' %}">新 增 模 块</a></li>
+            </ul>
+            {% if  "case" in request.path %}
+            <h3 class="am-icon-bug on"><em></em> <a href="#">用例管理</a></h3>
+            {% else %}
+            <h3 class="am-icon-bug"><em></em> <a href="#">用例管理</a></h3>
+            {% endif %}
+            <ul>
+                <li><a href="{% url 'case_add' %}">新 增 用 例</a></li>
+                <li><a href="{% url 'case_list' %}">用 例 列 表</a></li>
+            </ul>
+
+            <h3 class="am-icon-soundcloud"><em></em> <a href="#">测试计划</a></h3>
+            <ul>
+                <li><a href="#">定 时 任 务</a></li>
+            </ul>
+
+
+            <h3 class="am-icon-jsfiddle"><em></em> <a href="#">报告管理</a></h3>
+            <ul>
+                <li><a href="#">查看报告</a></li>
+            </ul>
+        </div>
+        <!-- sideMenu End -->
+    </div>
+
+    <div class="daohang">
+        <ul>
+            <li>
+                <button type="button" class="am-btn am-btn-default am-radius am-btn-xs"
+                        onclick="location='{% url 'index' %}'">返回首页
+                    <a href="{% url 'index' %}" class="am-close am-close-spin">~</a></button>
+            </li>
+            <li>
+                <button type="button" class="am-btn am-btn-default am-radius am-btn-xs"
+                        onclick="location='#'">项目列表<a
+                        href="#" class="am-close am-close-spin">~</a>
+                </button>
+            </li>
+            <li>
+                <button type="button" class="am-btn am-btn-default am-radius am-btn-xs"
+                        onclick="location='#'">模块列表<a
+                        href="#" class="am-close am-close-spin">~</a>
+                </button>
+            </li>
+            <li>
+                <button type="button" class="am-btn am-btn-default am-radius am-btn-xs"
+                        onclick="location='#'">用例列表<a
+                        href="#" class="am-close am-close-spin">~</a>
+                </button>
+            </li>
+            <li>
+                <button type="button" class="am-btn am-btn-default am-radius am-btn-xs"
+                        onclick="location='#'">新增用例<a
+                        href="#" class="am-close am-close-spin">~</a>
+                </button>
+            </li>
+            <li>
+                <button type="button" class="am-btn am-btn-default am-radius am-btn-xs"
+                        onclick="location='#'">新增任务<a
+                        href="#" class="am-close am-close-spin">~</a>
+                </button>
+            </li>
+
+        </ul>
+    </div>
+
+    {% block content %}
+
+    {% endblock %}
+    <script type="text/javascript">
+        $(".sideMenu").slide({
+            titCell: "h3", //鼠标触发对象
+            targetCell: "ul", //与titCell一一对应，第n个titCell控制第n个targetCell的显示隐藏
+            effect: "slideDown", //targetCell下拉效果
+            delayTime: 300, //效果时间
+            triggerTime: 150, //鼠标延迟触发时间（默认150）
+            defaultPlay: true,//默认是否执行效果（默认true）
+            returnDefault: false //鼠标从.sideMen移走后返回默认状态（默认false）
+        });
+    </script>
+</div>
+
+</body>
+</html>

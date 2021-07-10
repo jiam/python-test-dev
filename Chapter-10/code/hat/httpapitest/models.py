@@ -29,6 +29,6 @@ class DebugTalk(BaseTable):
         verbose_name = '驱动py文件'
         db_table = 'DebugTalk'
 
-    belong_project = models.ForeignKey(Project, on_delete=models.CASCADE)
     belong_project = models.OneToOneField(Project, on_delete=models.CASCADE)
     debugtalk = models.TextField(null=True, default='#debugtalk.py')
+

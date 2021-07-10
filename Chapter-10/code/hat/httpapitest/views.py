@@ -53,6 +53,8 @@ def project_add(request):
     # 显示项目添加页面
     if request.method == 'GET':
         return render(request, 'project_add.html')
+    else:
+        return HttpResponse("xxxxxxxxxxxxxx")
 
 @csrf_exempt
 def project_list(request):

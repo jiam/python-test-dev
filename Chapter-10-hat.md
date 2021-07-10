@@ -212,6 +212,7 @@ TEMPLATES = [
 
 在manage.py同级目录创建static目录,创建templates目录
 
+
 9. 配置项目目录下的urls.py 将匹配/httapitest的url 路由到app httpapitest的urls.py
 ```python
 from django.contrib import admin
@@ -470,6 +471,13 @@ class Project(BaseTable):
     publish_app = models.CharField('发布应用', max_length=100, null=False)
     simple_desc = models.CharField('简要描述', max_length=100, null=True)
     other_desc = models.CharField('其他信息', max_length=100, null=True)
+
+class DebugTalk(BaseTable):
+    class Meta:
+        verbose_name = '驱动py文件'
+        db_table = 'DebugTalk'
+    belong_project = models.OneToOneField(Project, on_delete=models.CASCADE)
+    debugtalk = models.TextField(null=True, default='#debugtalk.py')
 ```
 BaseTable 类里面有两个字段create_time、update_time，这两个字段在其他多个类里也要用到，其它需要这两个字段的类继续BaseTable即可；
 
@@ -565,6 +573,7 @@ def project_add(request):
     # 显示项目添加页面
     if request.method == 'GET':
         return render(request, 'project_add.html')
+
 ```
 ### 新建project_add.html 模板
 templates/project_add.html
@@ -1201,16 +1210,11 @@ def project_delete(request):
 ```
 
 ## debugtalk.py管理
-每一个项目里都要有一个debugtalk.py文件用来定义一些函数，用来被配置文件引用
-
 
 ### 添加debugtalk url
 ```
 path('debugtalk/edit/<int:id>', views.debugtalk_edit, name='debugtalk_edit'),
 ```
-
-
-
 ### 添加debugtalk 视图
 debugtalk视图用来编辑debugtalk.py内容
 
