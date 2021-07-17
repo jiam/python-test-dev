@@ -46,7 +46,7 @@
 <div class="am-cf admin-main">
     <div class="nav-navicon admin-main admin-sidebar">
         <div class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"> 欢迎您：{{ request.session.now_account }} &nbsp;&nbsp;<a
-                href="#">注 销</a></div>
+                href='{% url 'logout' %}'>注 销</a></div>
         <div class="sideMenu">
             {% if  "project" in request.path %}
             <h3 class="am-icon-folder on"><em></em> <a href="#">项目管理</a></h3>

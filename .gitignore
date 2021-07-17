@@ -7,3 +7,5 @@ venv/
 *.log
 test/
 *.sqlite3
+*/*/*/suite
+*/*/*/reports

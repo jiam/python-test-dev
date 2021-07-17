@@ -11,14 +11,32 @@ from httpapitest.utils import  get_time_stamp,timestamp_to_datetime
 from httprunner.api import HttpRunner
 from httpapitest.runner import run_test_by_type,run_by_single
 from httpapitest.runner import run_by_batch
-from httpapitest.tasks import main_hrun
+from httpapitest.tasks import main_hrun,test
 from django.utils.safestring import mark_safe
 import logging
 import os,shutil
+from django_celery_beat.models import PeriodicTask
+from httpapitest.utils import task_logic, get_total_values
+from httpapitest.models import UserInfo
+from django.shortcuts import redirect
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    project_length = Project.objects.count()
+    module_length = Module.objects.count()
+    test_length = TestCase.objects.count()
+    
+
+    total = get_total_values()
+    manage_info = {
+        'project_length': project_length,
+        'module_length': module_length,
+        'test_length': test_length,
+        'total': total
+    }
+
+    
+    return render(request, 'index.html', manage_info)
 
 
 @csrf_exempt
@@ -451,3 +469,128 @@ def report_view(request, id):
     reports = TestReports.objects.get(id=id).reports
     return render(request, 'report_view.html', {"reports": mark_safe(reports)})
 
+@csrf_exempt
+def task_add(request):
+    """
+    添加任务
+    :param request:
+    :return:
+    """
+
+    if request.is_ajax():
+        kwargs = json.loads(request.body.decode('utf-8'))
+        msg = task_logic(**kwargs)
+        if msg == 'ok':
+            return HttpResponse(reverse('task_list'))
+        else:
+            return HttpResponse(msg)
+    elif request.method == 'GET':
+        info = {
+            'project': Project.objects.all().order_by('-create_time')
+        }
+        return render(request, 'task_add.html', info)
+
+def task_list(request):
+    if request.method == 'GET':
+        name = request.GET.get('name','')
+        info = {'name': name}
+        if name:
+            rs = PeriodicTask.objects.filter(name=name).order_by('-date_changed')
+        else:
+            rs = PeriodicTask.objects.all().order_by('-date_changed')
+        paginator = Paginator(rs,5)
+        page = request.GET.get('page')
+        objects = paginator.get_page(page)
+        context_dict = {'task': objects, 'info': info}
+        return render(request,"task_list.html",context_dict)
+
+
+@csrf_exempt
+def task_delete(request):
+    if request.is_ajax():
+        data = json.loads(request.body.decode('utf-8'))
+        task_id = data.get('id')
+        task = PeriodicTask.objects.get(id=task_id)
+        task.delete()
+        return HttpResponse(reverse('task_list'))
+
+@csrf_exempt
+def task_set(request):
+    if request.is_ajax():
+        data = json.loads(request.body.decode('utf-8'))
+        task_id = data.get('id')
+        mode = data.get('mode')
+        task = PeriodicTask.objects.get(id=task_id)
+        task.enabled = mode
+        task.save()
+        return HttpResponse(reverse('task_list'))
+
+
+
+def login(request):
+    """
+    登录
+    :param request:
+    :return:
+    """
+    if request.method == 'POST':
+        username = request.POST.get('account')
+        password = request.POST.get('password')
+
+        if UserInfo.objects.filter(username__exact=username).filter(password__exact=password).count() == 1:
+            logging.info('{username} 登录成功'.format(username=username))
+            request.session["login_status"] = True
+            request.session["now_account"] = username
+            return redirect('index')
+        else:
+            logging.info('{username} 登录失败, 请检查用户名或者密码'.format(username=username))
+            return render(request, 'login.html', {'msg': '账号或密码不正确'})
+    elif request.method == 'GET':
+        return render(request, 'login.html')
+
+@csrf_exempt
+def register(request):
+    """
+    注册
+    :param request:
+    :return:
+    """
+    if request.is_ajax():
+        user_info = json.loads(request.body.decode('utf-8'))
+        try:
+            username = user_info.get('account')
+            password = user_info.get('password')
+            email = user_info.get('email')
+    
+            if UserInfo.objects.filter(username__exact=username).filter(status=1).count() > 0:
+                logging.debug('{username} 已被其他用户注册'.format(username=username))
+                msg = '该用户名已被注册，请更换用户名'
+            if UserInfo.objects.filter(email__exact=email).filter(status=1).count() > 0:
+                logging.debug('{email} 昵称已被其他用户注册'.format(email=email))
+                msg = '邮箱已被其他用户注册，请更换邮箱'
+            else:
+                UserInfo.objects.create(username=username, password=password, email=email)
+                logging.info('新增用户：{user_info}'.format(user_info=user_info))
+                msg =  'ok'
+        except Exception as e:
+            logging.error('信息输入有误：{user_info}'.format(user_info=user_info))
+            msg =  e
+        if msg == 'ok':
+            return HttpResponse('恭喜您，账号已成功注册')
+        else:
+            return HttpResponse(msg)
+    elif request.method == 'GET':
+        return render(request, "register.html")
+
+
+def logout(request):
+    """
+    注销登录
+    :param request:
+    :return:
+    """
+    if request.method == 'GET':
+        logging.info('{username}退出'.format(username=request.session['now_account']))
+        del request.session['now_account']
+        del request.session['login_status']
+        return redirect(login)
