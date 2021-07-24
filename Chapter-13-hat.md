@@ -24,7 +24,7 @@ INSTALLED_APPS = [
 
 2. 添加视图
 
-```
+```python
 @csrf_exempt
 def task_add(request):
     """
@@ -196,7 +196,53 @@ def delete_task(name):
     except celery_models.PeriodicTask.DoesNotExist:
         return 'error'
 ```
+commons.js添加函数
+```js
+/*添加计划任务*/
+function task_add(url) {
+    // 使用jquery获取表单数据
+    var data = $('#task_add').serializeJSON(); 
 
+    // 对表单数据做校验
+    if (data.project === '请选择' ) {
+        myAlert('请选择项目')
+        return
+    }
+    if (data.name === '') {
+        myAlert('名字不能为空')
+        return
+    }
+
+    if (data.module === '') {
+        myAlert('请选择模块')
+        return
+    }
+
+    if (data.crontab_time === '') {
+        myAlert('定时配置不可为空')
+        return
+    }
+
+    // 使用jquery的ajax 提交表单
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function (data) {
+            if (data.indexOf('/httpapitest/') !== -1) {
+                window.location.href = data;
+            } else {
+                myAlert(data);
+            }
+        },
+        error: function () {
+            myAlert('Sorry，服务器可能开小差啦, 请重试!');
+        }
+    });
+
+}
+```
 
 
 4. 添加模板
@@ -234,12 +280,12 @@ def project_sum(pro_name):
 def module_sum(id):
     module = Module.objects.get(id=id)
     test_count = str(TestCase.objects.filter(belong_module=module).count())
-    sum = test_count
+    sum = test_countmodule_sum
     return sum
 ```
 导入`from httpapitest.models import Module,TestCase`
 2. 将project_list.html 中的0 修改为 `{{ project.project_name | project_sum }}` 并在文件头部添加`{% load custom_tags %}`
-3. 将module_list.html中的0修改为`{{ moudle.id | module_sum }}` 并在文件头部添加`{% load custom_tags %}`
+3. 将module_list.html中的0修改为`{{ module.id |  }}` 并在文件头部添加`{% load custom_tags %}`
 
 ## dashboard
 
@@ -435,6 +481,327 @@ def login_check(func):
     return wrapper
 ```
  5. 在所有视图函数上添加 `@login_check` login和register函数除外,因为这两个不需要登录
+
+
+
+ ## 测试环境
+被测服务一个flask应用[api_server.py](./Chapter-13/code/demo/api_server.py)
+
+`pip install flask`
+
+该应用作为被测服务，主要有两类接口：
+
+* 权限校验，获取 token
+* 支持 CRUD 操作的 RESTful APIs，所有接口的请求头域中都必须包含有效的 token
+
+下载文件api_server.py,执行以下命令运行
+`python api_server.py `
+api_server.py包括一下功能
+1. index 返回hello world
+    ```
+    path: /
+    method: get
+    params: 无
+    ```
+    例子：
+    `curl 127.0.0.1:5000`
+2. get_token 获取认证token
+    ```
+    path: /api/get-token
+    method: post
+    header：device_sn，os_platform，app_version
+    数据格式： json
+    内容： {"sign":"xxxx"}
+    ```
+    例子：
+    `curl -H "device_sn:123456" -H "os_platform:ios" -H "app_version:v1" -H "Content-Type:application/json" -d '{"sign":"4d11fd0929db6d0df9dfdec5329a2f9c5b53ba1c"}' http://127.0.0.1:5000/api/get-token`
+3. get_users 获取用户列表
+   ```
+   path: /api/users
+   method: get
+   header: device_sn,token
+   ```
+   例子：
+   `curl -H "device_sn:123456" -H "token:T9OI65aASKcHqeaH"   http://127.0.0.1:5000/api/users`
+4. create_user 创建用户
+    ```
+    path：/api/users/uid
+    method：post
+    header: device_sn,token
+    数据格式： json
+    数据内容：{"user":"test"}
+    ```
+    例子
+    `
+     curl -XPOSt -H "device_sn:123456" -H "token:cnSQdjGu1D7XzK8l" -H "Content-Type:application/json"   http://127.0.0.1:5000/api/users/1004 -d '{"name":"test","password":"test"}'
+      `
+5. get_user 获取用户信息
+    ```
+    path：/api/users/uid
+    method：post
+    header: device_sn,token
+    ```
+    例子
+    ·curl -H "device_sn:123456" -H "token:cnSQdjGu1D7XzK8l"   http://127.0.0.1:5000/api/users/1004
+{"success": true, "data": {"name": "test", "password": "test"}}·
+
+6. update_user 更新用户信息
+    ```
+    path：/api/users/uid
+    method：put
+    header: device_sn,token
+    数据格式： json
+    数据内容：{"user":"test"}
+    ```
+
+   例子
+   `curl -XPUT -H "device_sn:123456" -H "token:cnSQdjGu1D7XzK8l" -H "Content-Type:application/json"   http://127.0.0.1:5000/api/users/1004 -d '{"name":"test","password":"test2"}'
+`
+7. delete_user 删除用户信息
+    ```
+    path：/api/users/uid
+    method：delete
+    header: device_sn,token
+
+    ```
+例子
+`curl -XDELETE -H "device_sn:123456" -H "token:cnSQdjGu1D7XzK8l"   http://127.0.0.1:5000/api/users/1004 
+{"success": true, "data": {"name": "test", "password": "test2"}}`
+
+### 简单例子
+1. 新建项目
+![img](./Chapter-13/code/pics/新建项目.png)
+
+2. 新增模块
+![img](./Chapter-13/code/pics/新建模块.png)
+
+3. 新增测试用例
+![img](./Chapter-13/code/pics/新建用例-1.jpg)
+![img](./Chapter-13/code/pics/新建用例-2.png)
+![img](./Chapter-13/code/pics/新建用例-3.png)
+
+4. 运行用例
+
+![img](./Chapter-13/code/pics/运行结果.png)
+
+### 高级用例
+一、get_token 用例
+1. 编写debugtalk
+```
+#debugtalk.py
+
+import hashlib
+import hmac
+import random
+import string
+
+SECRET_KEY = "DebugTalk"
+
+def gen_random_string(str_len):
+    random_char_list = []
+    for _ in range(str_len):
+        random_char = random.choice(string.ascii_letters + string.digits)
+        random_char_list.append(random_char)
+
+    random_string = ''.join(random_char_list)
+    return random_string
+
+def get_sign(*args):
+    content = ''.join(args).encode('ascii')
+    sign_key = SECRET_KEY.encode('ascii')
+    sign = hmac.new(sign_key, content, hashlib.sha1).hexdigest()
+    return sign
+```
+
+2. 定义变量
+![img](./Chapter-13/code/pics/get_token-变量.jpg)
+
+|变量名     | 变量值                   |
+|----------|--------------------------|
+| device_sn  | ${gen_random_string(15)}|
+| os_platform| win10                  |
+| app_version| 2.8.6                   |
+
+注： ${gen_random_string(15)} 是debugtalk中定义的函数gen_random_string(str_len)       |
+
+3. 定义请求方法和数据
+![img](./Chapter-13/code/pics/get_token-json.jpg)
+
+url http://127.0.0.1:5000/api/get-token
+
+方法 post
+json
+```
+{
+    "sign": "${get_sign($device_sn, $os_platform, $app_version)}"
+}
+```
+get_sign 为debugtalk中定义的函数$和大括号不能丢
+参数为我们刚才定义的变更
+4. 定义header
+![img](./Chapter-13/code/pics/get_token-header.jpg)
+
+|key     | value                |
+|----------|--------------------|
+| device_sn  | $device_sn       |
+| os_platform| $os_platform     |
+| app_version| $app_version     |
+
+二、create_user 用例
+1. 定义数据与header
+![img](./Chapter-13/code/pics/create_user-header.jpg)
+url http://127.0.0.1:5000/api/users/1000
+
+json
+```
+{
+    "name": "test",
+    "password": "test"
+}
+
+```
+
+header
+|key     | value                |
+|----------|--------------------|
+| device_sn| 12345     |
+| token    | $token    |
+
+2. 断言
+
+![img](./Chapter-13/code/pics/create_user-assert.jpg)
+status_code 201
+
+3. 添加依赖
+
+![img](./Chapter-13/code/pics/create_user-dep.jpg)
+
+创建用户接口需要一个token，该token可以通过get_token 接口获取
+
+修个get_token 用例添加一个提取
+![img](./Chapter-13/code/pics/get_token-extract.jpg)
+token    content.token
+
+并将get_token用例中的变量 device_sn改为123456
+
+练习修改用户接口
+
+## httprunner
+
+平台底层使用的是httprunnnr进行接口测试，运行测试时会在项目的根目录下有个sutie目录,每次运行都会在suite目录下产生一个时间格式的目录
+```
+hat/suite# ls
+'2021-02-28 14-35-12-412'  '2021-02-28 14-49-42-857'  '2021-03-06 14-07-41-004'  '2021-03-06 14-18-34-437'  '2021-03-06 14-45-12-737'  '2021-03-06 15-00-50-896'   reports
+'2021-02-28 14-36-28-064'  '2021-03-06 13-56-44-754'  '2021-03-06 14-14-44-314'  '2021-03-06 14-26-27-323'  '2021-03-06 14-46-54-131'  '2021-03-06 15-01-39-756'
+'2021-02-28 14-36-58-074'  '2021-03-06 13-58-57-868'  '2021-03-06 14-17-06-369'  '2021-03-06 14-44-36-376'  '2021-03-06 14-56-08-401'  '2021-03-06 15-01-58-616'
+```
+
+目录结构如下
+```
+tree '2021-03-06 15-01-58-616'
+2021-03-06 15-01-58-616
+├── apiserver测试
+│   └── 测试首页
+│       └── create-user.yml
+└── debugtalk.py
+
+2 directories, 2 files
+
+```
+里面包含我们项目中的debugtalk.py文件和测试用例文件xxx.yml
+
+yml格式如下
+```
+-   config:
+        base_url: ''
+        name: create-user
+-   test:
+        extract:
+        -   token: content.token
+        name: get-token
+        request:
+            headers:
+                app_version: $app_version
+                device_sn: $device_sn
+                os_platform: $os_platform
+            json:
+                sign: ${get_sign($device_sn, $os_platform, $app_version)}
+            method: POST
+            url: http://127.0.0.1:5000/api/get-token
+        validate:
+        -   check: status_code
+            comparator: equals
+            expect: 200
+        variables:
+        -   device_sn: '123456'
+        -   os_platform: ios
+        -   app_version: v1
+-   test:
+        name: create-user
+        request:
+            headers:
+                device_sn: '123456'
+                token: $token
+            json:
+                name: test
+                password: test
+            method: POST
+            url: http://127.0.0.1:5000/api/users/1004
+        validate:
+        -   check: status_code
+            comparator: equals
+            expect: 201
+
+```
+
+我们平台的创建用例就是生成这个yml的文件，运行用例就使用httprunner跑用例
+
+runner.py 中的 run_by_single函数作用就是生成上面的测试目录结构，包括debugtalk.py和yml文件
+
+执行测试用例代码，views.py中的test_run和test_batch_run
+```
+run_test_by_type(id, base_url, testcase_dir_path, type) #生成测试目录
+runner.run(testcase_dir_path) #使用httprunner的run方法，启动测试用例
+```
+我们也可以直接使用httprunner提供的命令hrun来运行测试用例
+```
+root@myhub:/opt/hat/suite/2021-03-06 15-01-58-616# hrun  ./
+INFO     Start to run testcase: create-user
+get-token
+INFO     POST http://127.0.0.1:5000/api/get-token
+INFO     status_code: 200, response_time(ms): 8.39 ms, response_length: 46 bytes
+
+.
+create-user
+INFO     POST http://127.0.0.1:5000/api/users/1004
+INFO     status_code: 201, response_time(ms): 9.33 ms, response_length: 54 bytes
+
+.
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.020s
+
+OK
+INFO     Start to render Html report ...
+INFO     Generated Html report: /opt/hat/suite/2021-03-06 15-01-58-616/reports/1615016134.html
+
+```
+
+yml配置文件
+extract 和 validate 常用字段 
+```
+response content could be json or html text.
+
+        Args:
+            field (str): string joined by delimiter.
+            e.g.
+                "status_code"
+                "headers"
+                "cookies"
+                "content"
+                "headers.content-type"
+                "content.person.name.first_name"
+```
 
 
 

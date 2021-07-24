@@ -1550,7 +1550,7 @@ Redis 的 Set 是 String 类型的无序集合。集合成员是唯一的，这�
 1. 查看key类型
 ` type student`
 2. 删除key
-`type student`
+`del student`
 3. 判断key是否存在
 ```
 127.0.0.1:6379> set name jia
