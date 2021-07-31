@@ -1,6 +1,6 @@
 # CICD
 
-## 线上环境部署
+## centos服务器部署hat
 
 ### 操作系统
 centos 7
@@ -146,7 +146,7 @@ mysqlclient 安装时需要gcc进行编译
 # 在env环境下进入代码目录
 cd /opt/hat
 # 安装依赖模块
-(env) [root@python-dev autotest]# pip install -r requirements.txt -i https://pypi.douban.com/simple/  
+pip install -r requirements.txt -i https://pypi.douban.com/simple/ 
 
 ```
 ### 初始化数据库
@@ -157,8 +157,8 @@ mysql -uroot -p
 create database hat /*!40100 DEFAULT CHARACTER SET utf8 */;
 
 # 授权
-grant all on hat.* to hatuser@`%` identified by 'hat2019'
-grant all on hat.* to hatuser@`localhost` identified by 'hat2019'
+grant all on hat.* to hatuser@`%` identified by 'hat2019';
+grant all on hat.* to hatuser@`localhost` identified by 'hat2019';
 # 退出数据库
 quit
 ```
@@ -172,7 +172,7 @@ quit
 ```
 (env) [root@python-dev hat]# nohup gunicorn hat.wsgi >logs/gunicorn.log 2>&1 &
 [1] 14207
-(env) [root@python-dev hat]# tail gunicorn.log
+(env) [root@python-dev hat]# tail logs/gunicorn.log
 nohup: ignoring input
 [2018-09-08 11:09:45 +0000] [14207] [INFO] Starting gunicorn 19.9.0
 [2018-09-08 11:09:45 +0000] [14207] [INFO] Listening at: http://127.0.0.1:8000 (14207)
@@ -202,8 +202,6 @@ systemctl stop firewalld
 `sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config`
 
 ### 安装nginx
-
-
 
 
 # 安装命令
@@ -249,7 +247,8 @@ EOF
 ### reload
 `nginx -s reload`
 
-## docker 部署
+
+## docker部署hat
 
 ### 安装docker
 ```
@@ -366,6 +365,10 @@ EOF
 systemctl stop nginx
 `docker run -d --network=host  --name hat hat:1.0`
 
+
+
+
+## mysql常用命令
 
 ### mysql创建用户并授权
 
