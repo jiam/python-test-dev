@@ -233,7 +233,7 @@ jenkins 开源持续集成（CI）工具
 `tail -20 -f /opt/jenkins.log`
 
 5. 停止firewalld进程
-`systemctl stop firewalled && systemctl restart docker`
+`systemctl stop firewalld && systemctl restart docker`
 
 6. 访问jenkins
 账户admin，密码admin
